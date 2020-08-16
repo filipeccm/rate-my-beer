@@ -1,0 +1,11 @@
+.stars-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.stars input[type='radio'] {
+  display: none;
+}
+.stars svg {
+  transition: color 0.1s ease-in-out;
+}

@@ -1,0 +1,40 @@
+.display-stars-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.display-stars {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.stars-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mask-container {
+  width: calc(1em * 5);
+  height: 0.8em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+.mask {
+  position: absolute;
+  width: calc(1em * 5);
+  height: 0.8em;
+  overflow-x: hidden;
+  transition: width 0.2s ease-in-out;
+}
+.mask-stars {
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 0.2em;
+}
+.empty-stars {
+  width: 0.8em;
+  height: 0.8em;
+  margin-right: 0.2em;
+}
