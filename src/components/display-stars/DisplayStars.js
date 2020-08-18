@@ -11,7 +11,10 @@ const DisplayStars = ({ averageRating }) => {
   useEffect(() => {
     if (averageRating) {
       const avg = averageRating / 5;
-      maskRef.current.style.setProperty('width', `calc((1em * 5) * ${avg})`);
+      maskRef.current.style.setProperty(
+        'width',
+        `calc((1em * 4 + 0.8em) * ${avg})`
+      );
     }
   }, [averageRating]);
 

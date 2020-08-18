@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './Beers.css';
 
 import OneBeer from './OneBeer';
+import MyBeers from '../my-beers/MyBeers';
 
 import { firestore } from '../../firebase/firebase.utils';
 
 const Beers = ({ currentUser }) => {
   const [beers, setBeers] = useState(null);
+  console.log('rendered');
 
   //get all beers
   useEffect(() => {
@@ -32,12 +34,7 @@ const Beers = ({ currentUser }) => {
       <div className="beers-grid">
         {beers
           ? beers.map((beer) => (
-              <OneBeer
-                key={beer.id}
-                beer={beer}
-                currentUser={currentUser}
-                beers={beers}
-              />
+              <OneBeer key={beer.id} beer={beer} currentUser={currentUser} />
             ))
           : null}
       </div>

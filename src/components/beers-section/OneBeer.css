@@ -3,7 +3,6 @@
   width: 225px;
   background-color: #03081d;
   border-radius: 10px;
-  background-image: url('https://dummyimage.com/225x225/003147/fff');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -13,7 +12,7 @@
   width: 225px;
   height: 225px;
   background: black;
-  opacity: 0.5;
+  opacity: 0.6;
   position: absolute;
   border-radius: 10px;
   transition: opacity 0.2s ease-in-out;
@@ -44,6 +43,7 @@
 }
 .beer-card span {
   color: #f88a32;
+  font-weight: 700;
 }
 
 .beer-card-rating {

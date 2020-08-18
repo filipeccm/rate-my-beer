@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Stars.css';
 
-import { FaStar, FaStarHalf } from 'react-icons/fa';
+import { FaStar } from 'react-icons/fa';
 
 import { rateThisBeer } from '../../firebase/firebase.utils';
 

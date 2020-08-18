@@ -1,0 +1,57 @@
+.beer-popup-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+.beer-popup {
+  position: absolute;
+  width: 300px;
+  height: 530px;
+  background-color: #03081d;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.beer-popup h2,
+p {
+  color: white;
+}
+.beer-popup h2 {
+  font-size: 30px;
+  margin-bottom: 0.15em;
+}
+.beer-popup p {
+  font-size: 18px;
+}
+.beer-popup span {
+  color: #f88a32;
+  font-weight: 700;
+}
+.beer-popup-image {
+  position: relative;
+  width: 100%;
+  background: blue;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+.beer-popup-image:before {
+  content: '';
+  padding-top: 100%;
+  float: left;
+}
+.beer-popup-info {
+  padding: 1em;
+}
+.beer-popup-info .beer-card-rating {
+  width: 0px;
+  transform: scale(1.1);
+  margin-bottom: 0.15em;
+}
