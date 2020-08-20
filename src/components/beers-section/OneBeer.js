@@ -6,10 +6,13 @@ import { Link, useLocation } from 'react-router-dom';
 import Stars from '../stars/Stars';
 import DisplayStars from '../display-stars/DisplayStars';
 
-import { rateThisBeer, firestore } from '../../firebase/firebase.utils';
+import {
+  rateThisBeer,
+  updateRatings,
+  firestore,
+} from '../../firebase/firebase.utils';
 
 const OneBeer = ({
-  currentUser,
   beer: { name, averageRating, numberOfRatings, imageUrl, id },
 }) => {
   const overlayRef = useRef();
@@ -22,6 +25,10 @@ const OneBeer = ({
   const showOverlay = () => {
     overlayRef.current.style.setProperty('opacity', '0.5');
   };
+
+  useEffect(() => {
+    updateRatings(id);
+  }, [id]);
 
   // useEffect(() => {
   //   //get the specific beer
@@ -78,7 +85,7 @@ const OneBeer = ({
             <span>{averageRating}</span> out of <span>{numberOfRatings}</span>{' '}
             ratings
           </p>
-          <Stars form={false} beerId={id} currentUser={currentUser} />
+          {/* <Stars form={false} beerId={id} currentUser={currentUser} /> */}
         </div>
       </div>
     </Link>

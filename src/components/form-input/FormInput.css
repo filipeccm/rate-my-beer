@@ -1,4 +1,46 @@
-.form {
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f88933;
+  -webkit-box-shadow: 0 0 0px 1000px rgb(255, 255, 255) inset;
+}
+
+.form-input {
+  position: relative;
   display: flex;
   justify-content: center;
+}
+
+.form-input input {
+  background: none;
+  background-color: #fff;
+  color: #f88933;
+  font-size: 18px;
+  padding: 12px 12px 8px 12px;
+  display: block;
+  width: 85%;
+  border-radius: 0;
+  border: none;
+  border: 1px solid #03081e;
+  margin: 20px 0;
+}
+.form-input input:focus {
+  outline: none;
+}
+.form-input label {
+  color: #03081e;
+  font-size: 14px;
+  font-weight: 600;
+  position: absolute;
+  pointer-events: none;
+  left: 30px;
+  top: 10px;
+  padding: 0 0.8em;
+  background-color: white;
 }

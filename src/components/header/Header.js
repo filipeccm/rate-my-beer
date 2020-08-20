@@ -1,5 +1,7 @@
 import React from 'react';
 import './Header.css';
+import { FaHeart, FaUserCheck, FaUser, FaPlusCircle } from 'react-icons/fa';
+import { ReactComponent as Logo } from '../../images/rate-my-beer-logo.svg';
 
 import { Link } from 'react-router-dom';
 import { auth } from '../../firebase/firebase.utils';
@@ -8,18 +10,25 @@ const Header = ({ currentUser }) => {
   return (
     <nav className="nav-bar">
       <Link className="nav-item" to="/">
-        Home
+        <Logo />
       </Link>
       <Link className="nav-item" to="/my-beers">
-        My Beers
+        <FaHeart />
+        <span className="nav-item-desc">Favorite beers</span>
+      </Link>
+      <Link className="nav-item" to="/add-beer">
+        <FaPlusCircle />
+        <span className="nav-item-desc">Add beer</span>
       </Link>
       {currentUser ? (
-        <button className="nav-item" onClick={() => auth.signOut()}>
-          Sign Out
-        </button>
+        <div className="nav-item" onClick={() => auth.signOut()}>
+          <FaUserCheck />
+          <span className="nav-item-desc">Logout</span>
+        </div>
       ) : (
         <Link className="nav-item" to="/sign-in">
-          Sign in
+          <FaUser />
+          <span className="nav-item-desc">Login</span>
         </Link>
       )}
     </nav>

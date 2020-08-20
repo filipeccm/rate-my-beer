@@ -9,12 +9,14 @@ const DisplayStars = ({ averageRating }) => {
   const nums = [1, 2, 3, 4, 5];
 
   useEffect(() => {
-    if (averageRating) {
+    if (averageRating >= 0) {
       const avg = averageRating / 5;
       maskRef.current.style.setProperty(
         'width',
         `calc((1em * 4 + 0.8em) * ${avg})`
       );
+      console.log(averageRating);
+      console.log(maskRef.current.clientWidth);
     }
   }, [averageRating]);
 

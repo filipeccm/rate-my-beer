@@ -1,4 +1,77 @@
+.form-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-container {
+  background-color: white;
+  width: 300px;
+  border-radius: 10px;
+  padding: 1em;
+  overflow: hidden;
+}
+.form-container h2 {
+  text-align: center;
+  color: #03081e;
+  margin-bottom: 1em;
+}
+.form-image {
+  width: 100%;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+}
+.form-image .shape {
+  width: 220px;
+  position: relative;
+  top: -30px;
+  right: -5px;
+}
+.form-image .beer-icon {
+  width: 70px;
+  position: absolute;
+}
+
 .radio-buttons {
   display: flex;
   justify-content: center;
+}
+.send-button-container {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.send-button {
+  border-radius: 5px;
+  width: 100px;
+  height: 50px;
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  transition-property: border-radius, width;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
+  cursor: pointer;
+  background-color: rgb(40, 168, 40);
+  border: none;
+  border: 1px solid rgb(40, 168, 40);
+}
+.send-button:hover {
+  color: rgb(40, 168, 40);
+  background-color: white;
+}
+.send-button:focus {
+  outline: none;
+}
+.send-button.submit-successful {
+  border-radius: 50%;
+  width: 50px;
+  color: white;
+}
+.send-button.submit-successful:hover {
+  color: rgb(40, 168, 40);
 }

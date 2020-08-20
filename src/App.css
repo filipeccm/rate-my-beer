@@ -1,4 +1,6 @@
 .app-body {
-  margin-left: 70px;
+  margin-left: 100px;
   padding: 2em;
+  min-height: 100vh;
+  background-color: #03081d;
 }

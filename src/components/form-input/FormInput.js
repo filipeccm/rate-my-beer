@@ -3,9 +3,9 @@ import './FormInput.css';
 
 const FormInput = ({ handleChange, label, ...otherProps }) => {
   return (
-    <div className="form">
+    <div className="form-input">
       {label ? <label>{label}</label> : null}
-      <input onChange={handleChange} {...otherProps} />
+      <input onChange={handleChange} {...otherProps} required />
     </div>
   );
 };

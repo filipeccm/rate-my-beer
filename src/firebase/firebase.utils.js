@@ -37,6 +37,32 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   return userRef;
 };
 
+export const updateRatings = (beerId) => {
+  //get the specific beer
+  const beerRef = firestore.doc(`beers/${beerId}`);
+  //get all ratings for specific beer
+  const ratingRef = firestore.doc(`ratings/${beerId}`);
+  //ratings realtime listener
+  ratingRef.onSnapshot((snapshot) => {
+    const values = snapshot.data();
+    if (snapshot.exists) {
+      const nor = Object.values(values).length;
+      const rt = Object.values(values).reduce((a, b) => a + b);
+      const avg = Math.round((rt / nor) * 10) / 10;
+      try {
+        //update the ratings inside the beer
+        beerRef.update({
+          numberOfRatings: nor,
+          ratingTotal: rt,
+          averageRating: avg,
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  });
+};
+
 //rate a beer
 export const rateThisBeer = async (beerId, currentUser, value) => {
   if (currentUser == null) return console.log('you must login to rate a beer');
@@ -46,13 +72,14 @@ export const rateThisBeer = async (beerId, currentUser, value) => {
 
   const snap = await ratingRef.get();
 
-  console.log(snap.empty);
-  if (snap.empty) {
+  console.log(snap.exists);
+  if (!snap.exists) {
     //create rating for first time
     try {
       ratingRef.set({
         [userId]: value,
       });
+      updateRatings(beerId);
     } catch (error) {
       console.log(error.message);
     }
@@ -62,6 +89,7 @@ export const rateThisBeer = async (beerId, currentUser, value) => {
       ratingRef.update({
         [userId]: value,
       });
+      updateRatings(beerId);
     } catch (error) {
       console.log(error.message);
     }
@@ -79,6 +107,30 @@ export const getAllTheRatings = async (id, currentUserId) => {
     .catch((err) => console.log(err));
 };
 
+export const toggleFavorite = async (beerId, currentUser) => {
+  if (!currentUser) return console.log('you must login to favorite');
+
+  const userId = currentUser.id;
+
+  const favoriteRef = firestore.doc(`favorites/${beerId}`);
+
+  favoriteRef.get().then((doc) => {
+    const obj = { ...doc.data() };
+    console.log(obj);
+    if (obj.hasOwnProperty(userId) === false) {
+      favoriteRef.set({
+        ...obj,
+        [userId]: true,
+      });
+    } else {
+      favoriteRef.update({
+        [userId]: !doc.data()[userId],
+      });
+      console.log(userId);
+    }
+  });
+};
+
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();
@@ -90,12 +142,3 @@ provider.setCustomParameters({ prompt: 'select_account' });
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
-
-// export let beerArray = [];
-
-// const beersRef = firestore.collection('beers');
-// beersRef.onSnapshot((snapshot) => {
-//   snapshot.docs.forEach((snap) => beerArray.push(snap.data()));
-// });
-
-// console.log('OLHA', beerArray);

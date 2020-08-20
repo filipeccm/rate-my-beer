@@ -1,4 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+  Redirect,
+} from 'react-router-dom';
 import './App.css';
 
 import Header from './components/header/Header';
@@ -8,12 +15,7 @@ import MyBeers from './components/my-beers/MyBeers';
 
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import FormAddBeer from './components/form-add-beer/FormAddBeer';
-import {
-  BrowserRouter as Switch,
-  Route,
-  useLocation,
-  Redirect,
-} from 'react-router-dom';
+
 import BeerPopup from './components/beer-popup/BeerPopup';
 
 const App = () => {
@@ -55,7 +57,17 @@ const App = () => {
             path="/"
             render={() => <Beers currentUser={currentUser} />}
           />
-          {/* <FormAddBeer currentUser={currentUser} /> */}
+          <Route
+            exact
+            path="/add-beer"
+            render={() =>
+              currentUser ? (
+                <FormAddBeer currentUser={currentUser} />
+              ) : (
+                <Redirect to="/sign-in" />
+              )
+            }
+          />
           <Route
             exact
             path="/my-beers"
@@ -70,16 +82,15 @@ const App = () => {
           <Route
             exact
             path="/sign-in"
-            render={() =>
-              currentUser ? (
-                <Redirect to="/" />
-              ) : (
-                <SignIn currentUser={currentUser} />
-              )
-            }
+            render={() => (currentUser ? <Redirect to="/" /> : <SignIn />)}
           />
         </Switch>
-        {background && <Route path="/beers/:id" children={<BeerPopup />} />}
+        {background && (
+          <Route
+            path="/beers/:id"
+            children={<BeerPopup currentUser={currentUser} />}
+          />
+        )}
       </main>
     </div>
   );

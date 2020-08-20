@@ -10,6 +10,7 @@
   background: rgba(0, 0, 0, 0.5);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  z-index: 10;
 }
 .beer-popup {
   position: absolute;

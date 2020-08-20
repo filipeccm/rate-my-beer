@@ -1,30 +1,60 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { firestore } from '../../firebase/firebase.utils';
+import { firestore, toggleFavorite } from '../../firebase/firebase.utils';
 
 import './BeerPopup.css';
 
 import DisplayStars from '../display-stars/DisplayStars';
 import Stars from '../stars/Stars';
 
-const BeerPopup = ({ history, match }) => {
+const BeerPopup = ({ history, match, currentUser }) => {
   const [beerData, setBeerData] = useState({});
   const [favorite, setFavorite] = useState(false);
 
-  const { name, imageUrl, averageRating, numberOfRatings, origin } = beerData;
+  const beerId = match.params.id;
+
+  const {
+    name,
+    imageUrl,
+    averageRating,
+    numberOfRatings,
+    origin,
+    id,
+  } = beerData;
 
   useEffect(() => {
-    firestore
+    const unsubscribe = firestore
       .doc(`beers/${match.params.id}`)
-      .get()
-      .then((beer) => {
+      .onSnapshot((beer) => {
         setBeerData({
           id: beer.id,
           ...beer.data(),
         });
       });
+
+    return () => unsubscribe();
   }, [match.params.id]);
+
+  useEffect(() => {
+    if (currentUser) {
+      const unsubscribe = firestore
+        .doc(`favorites/${match.params.id}`)
+        .onSnapshot((doc) => {
+          const obj = { ...doc.data() };
+          if (
+            obj.hasOwnProperty(currentUser.id) &&
+            obj[currentUser.id] === true
+          ) {
+            setFavorite(true);
+          } else {
+            setFavorite(false);
+          }
+        });
+
+      return () => unsubscribe();
+    }
+  }, [match.params.id, currentUser]);
 
   return (
     <div className="beer-popup-wrapper" onClick={() => history.goBack()}>
@@ -51,8 +81,13 @@ const BeerPopup = ({ history, match }) => {
               <p>
                 Origin <span>{origin}</span>
               </p>
-              {favorite ? <button>Remove</button> : <button>Add</button>}
-              {/* <Stars form={false} beerId={id} currentUser={currentUser} /> */}
+              <button
+                onClick={() => toggleFavorite(match.params.id, currentUser)}
+              >
+                {favorite ? 'Remove' : 'Add'}
+              </button>
+
+              <Stars form={false} beerId={beerId} currentUser={currentUser} />
             </div>
           </Fragment>
         ) : null}
