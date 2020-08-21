@@ -43,7 +43,7 @@ export const updateRatings = (beerId) => {
   //get all ratings for specific beer
   const ratingRef = firestore.doc(`ratings/${beerId}`);
   //ratings realtime listener
-  ratingRef.onSnapshot((snapshot) => {
+  const unsubscribe = ratingRef.onSnapshot((snapshot) => {
     const values = snapshot.data();
     if (snapshot.exists) {
       const nor = Object.values(values).length;
@@ -61,6 +61,8 @@ export const updateRatings = (beerId) => {
       }
     }
   });
+
+  return () => unsubscribe();
 };
 
 //rate a beer
@@ -76,20 +78,28 @@ export const rateThisBeer = async (beerId, currentUser, value) => {
   if (!snap.exists) {
     //create rating for first time
     try {
-      ratingRef.set({
-        [userId]: value,
-      });
-      updateRatings(beerId);
+      ratingRef
+        .set({
+          [userId]: value,
+        })
+        .then(() => {
+          updateRatings(beerId);
+        })
+        .catch((err) => console.log(err));
     } catch (error) {
       console.log(error.message);
     }
   } else {
     //update existing rating
     try {
-      ratingRef.update({
-        [userId]: value,
-      });
-      updateRatings(beerId);
+      ratingRef
+        .update({
+          [userId]: value,
+        })
+        .then(() => {
+          updateRatings(beerId);
+        })
+        .catch((err) => console.log(err));
     } catch (error) {
       console.log(error.message);
     }
