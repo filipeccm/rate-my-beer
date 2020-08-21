@@ -1,0 +1,22 @@
+.sign-in-shape {
+  top: 0;
+  width: 220px;
+  position: relative;
+}
+.sign-in-icon {
+  width: 100px;
+  position: absolute;
+}
+.login-buttons-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.send-button.google {
+  background-color: rgb(77, 134, 219);
+  border: 1px solid rgb(77, 134, 219);
+}
+.send-button.google:hover {
+  color: rgb(77, 134, 219);
+  background-color: white;
+}

@@ -26,7 +26,7 @@ const Header = ({ currentUser }) => {
           <span className="nav-item-desc">Logout</span>
         </div>
       ) : (
-        <Link className="nav-item" to="/sign-in">
+        <Link className="nav-item" to="/login">
           <FaUser />
           <span className="nav-item-desc">Login</span>
         </Link>

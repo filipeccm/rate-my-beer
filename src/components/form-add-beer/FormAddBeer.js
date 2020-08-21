@@ -2,13 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import './FormAddBeer.css';
 
 import FormInput from '../form-input/FormInput';
-import Stars from '../stars/Stars';
 import { FaCheck } from 'react-icons/fa';
 import { ReactComponent as BeerIcon } from '../../images/form-icon.svg';
 
-import { firestore, rateThisBeer } from '../../firebase/firebase.utils';
+import { firestore } from '../../firebase/firebase.utils';
 
-const FormAddBeer = ({ currentUser }) => {
+const FormAddBeer = () => {
   const [data, setData] = useState({
     name: '',
     origin: '',
@@ -17,27 +16,19 @@ const FormAddBeer = ({ currentUser }) => {
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // const buttonRef = useRef();
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, rating } = data;
 
     const beersRef = firestore.collection('beers');
     try {
       setIsSubmiting(true);
-      beersRef.add({
+      await beersRef.add({
         ...data,
         averageRating: 0,
         numberOfRatings: 0,
         ratingTotal: 0,
       });
-      // .then((newBeer) => {
-      //   const ratingRef = firestore.doc(`ratings/${newBeer.id}`);
-      //   ratingRef.set({
-      //     exists: true,
-      //   });
-      // });
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
@@ -56,10 +47,6 @@ const FormAddBeer = ({ currentUser }) => {
       [name]: value,
     });
   };
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   return (
     <div className="form-wrapper">

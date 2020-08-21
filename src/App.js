@@ -9,7 +9,7 @@ import {
 import './App.css';
 
 import Header from './components/header/Header';
-import SignIn from './components/sign-in/SignIn';
+import SignInSignUp from './pages/sign-in-sign-up/SignInSignUp';
 import Beers from './components/beers-section/Beers';
 import MyBeers from './components/my-beers/MyBeers';
 
@@ -64,7 +64,7 @@ const App = () => {
               currentUser ? (
                 <FormAddBeer currentUser={currentUser} />
               ) : (
-                <Redirect to="/sign-in" />
+                <Redirect to="/login" />
               )
             }
           />
@@ -75,14 +75,16 @@ const App = () => {
               currentUser ? (
                 <MyBeers currentUser={currentUser} />
               ) : (
-                <Redirect to="/sign-in" />
+                <Redirect to="/login" />
               )
             }
           />
           <Route
             exact
-            path="/sign-in"
-            render={() => (currentUser ? <Redirect to="/" /> : <SignIn />)}
+            path="/login"
+            render={() =>
+              currentUser ? <Redirect to="/" /> : <SignInSignUp />
+            }
           />
         </Switch>
         {background && (
