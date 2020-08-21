@@ -9,7 +9,7 @@ import { auth } from '../../firebase/firebase.utils';
 const Header = ({ currentUser }) => {
   return (
     <nav className="nav-bar">
-      <Link className="nav-item" to="/rate-my-beer">
+      <Link className="nav-item" to="/">
         <Logo />
       </Link>
       <Link className="nav-item" to="/my-beers">

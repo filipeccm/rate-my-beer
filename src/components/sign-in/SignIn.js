@@ -53,14 +53,14 @@ const SignIn = () => {
         <h2>Login with your account</h2>
         <FormInput
           name="email"
-          label="email"
+          label="Email"
           type="email"
           value={loginData.email}
           handleChange={handleChange}
         />
         <FormInput
           name="password"
-          label="password"
+          label="Password"
           type="password"
           value={loginData.password}
           handleChange={handleChange}
