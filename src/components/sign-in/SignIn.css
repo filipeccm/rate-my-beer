@@ -1,10 +1,10 @@
 .sign-in-shape {
-  top: 0;
+  top: 10px;
   width: 220px;
   position: relative;
 }
 .sign-in-icon {
-  width: 100px;
+  width: 118px;
   position: absolute;
 }
 .login-buttons-container {
