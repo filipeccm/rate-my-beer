@@ -1,12 +1,13 @@
 import React, { useEffect, useState, Fragment } from 'react';
+import './BeerPopup.css';
 import { withRouter } from 'react-router-dom';
 
 import { firestore, toggleFavorite } from '../../firebase/firebase.utils';
 
-import './BeerPopup.css';
-
 import DisplayStars from '../display-stars/DisplayStars';
 import Stars from '../stars/Stars';
+
+import { FaRegHeart, FaHeart } from 'react-icons/fa';
 
 const BeerPopup = ({ history, match, currentUser }) => {
   const [beerData, setBeerData] = useState({});
@@ -70,24 +71,31 @@ const BeerPopup = ({ history, match, currentUser }) => {
               }}
             ></div>
             <div className="beer-popup-info">
+              <div className="beer-popup-icons">
+                {favorite ? (
+                  <FaHeart
+                    className="favorite-button favorited"
+                    onClick={() => toggleFavorite(match.params.id, currentUser)}
+                  />
+                ) : (
+                  <FaRegHeart
+                    className="favorite-button"
+                    onClick={() => toggleFavorite(match.params.id, currentUser)}
+                  />
+                )}
+                <Stars form={false} beerId={beerId} currentUser={currentUser} />
+              </div>
               <h2>{name}</h2>
               <div className="beer-card-rating">
                 <DisplayStars averageRating={averageRating} />
               </div>
-              <p>
+              <p className="beer-card-p">
                 <span>{averageRating}</span> out of{' '}
                 <span>{numberOfRatings}</span> ratings
               </p>
               <p>
-                Origin <span>{origin}</span>
+                Origin <span className="extra-info">{origin}</span>
               </p>
-              <button
-                onClick={() => toggleFavorite(match.params.id, currentUser)}
-              >
-                {favorite ? 'Remove' : 'Add'}
-              </button>
-
-              <Stars form={false} beerId={beerId} currentUser={currentUser} />
             </div>
           </Fragment>
         ) : null}
