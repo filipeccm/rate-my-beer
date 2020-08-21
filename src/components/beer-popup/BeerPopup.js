@@ -15,14 +15,7 @@ const BeerPopup = ({ history, match, currentUser }) => {
 
   const beerId = match.params.id;
 
-  const {
-    name,
-    imageUrl,
-    averageRating,
-    numberOfRatings,
-    origin,
-    id,
-  } = beerData;
+  const { name, imageUrl, averageRating, numberOfRatings, origin } = beerData;
 
   useEffect(() => {
     const unsubscribe = firestore

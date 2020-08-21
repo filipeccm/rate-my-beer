@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './SignIn.css';
 
 import { signInWithGoogle } from '../../firebase/firebase.utils';
@@ -69,7 +69,11 @@ const SignIn = () => {
           <button className="send-button" type="submit">
             Login
           </button>
-          <button className="send-button google" onClick={signInWithGoogle}>
+          <button
+            type="button"
+            className="send-button google"
+            onClick={signInWithGoogle}
+          >
             Login with Google
           </button>
         </div>

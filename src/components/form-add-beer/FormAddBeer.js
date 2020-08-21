@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import './FormAddBeer.css';
 
 import FormInput from '../form-input/FormInput';
@@ -18,7 +18,6 @@ const FormAddBeer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, rating } = data;
 
     const beersRef = firestore.collection('beers');
     try {

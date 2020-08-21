@@ -1,16 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './OneBeer.css';
 
 import { Link, useLocation } from 'react-router-dom';
 
-import Stars from '../stars/Stars';
 import DisplayStars from '../display-stars/DisplayStars';
 
-import {
-  rateThisBeer,
-  updateRatings,
-  firestore,
-} from '../../firebase/firebase.utils';
+import { updateRatings } from '../../firebase/firebase.utils';
 
 const OneBeer = ({
   beer: { name, averageRating, numberOfRatings, imageUrl, id },
@@ -85,7 +80,6 @@ const OneBeer = ({
             <span>{averageRating}</span> out of <span>{numberOfRatings}</span>{' '}
             ratings
           </p>
-          {/* <Stars form={false} beerId={id} currentUser={currentUser} /> */}
         </div>
       </div>
     </Link>
