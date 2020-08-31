@@ -31,7 +31,8 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         ...additionalData,
       });
     } catch (error) {
-      console.log('error creating user', error.message);
+      console.log(error.message);
+      alert('error creating user');
     }
   }
   return userRef;
@@ -74,7 +75,6 @@ export const rateThisBeer = async (beerId, currentUser, value) => {
 
   const snap = await ratingRef.get();
 
-  console.log(snap.exists);
   if (!snap.exists) {
     //create rating for first time
     try {

@@ -75,3 +75,10 @@
 .send-button.submit-successful:hover {
   color: rgb(40, 168, 40);
 }
+
+@media screen and (max-width: 768px) {
+  .form-container {
+    width: 250px;
+    margin-bottom: 1em;
+  }
+}

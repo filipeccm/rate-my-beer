@@ -40,15 +40,12 @@ export const fetchFavoriteBeersIdsStartAsync = (currentUser) => {
       .onSnapshot({ includeMetadataChanges: true }, async (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === 'added') {
-            console.log('added');
             dispatch(addFavoriteBeer({ id: change.doc.id }));
           }
           if (change.type === 'modified') {
-            console.log('modified');
             dispatch(updateFavoriteBeer({ id: change.doc.id }));
           }
           if (change.type === 'removed') {
-            console.log('removed');
             dispatch(removeFavoriteBeer(change.doc.id));
           }
         });

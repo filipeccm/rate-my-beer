@@ -37,8 +37,8 @@
   background-color: #ffb941;
 }
 .nav-item:first-child svg {
-  width: 80px;
-  height: 80px;
+  width: 65px;
+  height: 65px;
 }
 .nav-item svg {
   width: 30px;
@@ -46,4 +46,24 @@
 }
 .nav-item:hover {
   color: #ffb941;
+}
+@media screen and (max-width: 768px) {
+  .nav-bar {
+    width: 70px;
+  }
+  .nav-item {
+    width: 70px;
+    height: 70px;
+  }
+  .nav-item:first-child svg {
+    width: 45px;
+    height: 45px;
+  }
+  .nav-item svg {
+    width: 20px;
+    height: 20px;
+  }
+  .nav-item-desc {
+    display: none;
+  }
 }

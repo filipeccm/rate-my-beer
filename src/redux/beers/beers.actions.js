@@ -35,15 +35,12 @@ export const fetchBeersStartAsync = () => {
       .onSnapshot({ includeMetadataChanges: true }, async (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === 'added') {
-            console.log('added');
             dispatch(addBeer({ id: change.doc.id, ...change.doc.data() }));
           }
           if (change.type === 'modified') {
-            console.log('modified');
             dispatch(updateBeer({ id: change.doc.id, ...change.doc.data() }));
           }
           if (change.type === 'removed') {
-            console.log('removed');
             dispatch(removeBeer(change.doc.id));
           }
         });

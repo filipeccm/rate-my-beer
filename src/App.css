@@ -4,3 +4,9 @@
   min-height: 100vh;
   background-color: #03081d;
 }
+
+@media screen and (max-width: 768px) {
+  .app-body {
+    margin-left: 70px;
+  }
+}
