@@ -1,34 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import './Beers.css';
 
 import OneBeer from './OneBeer';
-import MyBeers from '../my-beers/MyBeers';
 
-import { firestore } from '../../firebase/firebase.utils';
+import { fetchBeersStartAsync } from '../../redux/beers/beers.actions';
+import { selectBeersItems } from '../../redux/beers/beers.selectors';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 
-const Beers = ({ currentUser }) => {
-  const [beers, setBeers] = useState(null);
-  console.log('rendered');
-
-  //get all beers
-  useEffect(() => {
-    const unsubscribe = firestore.collection('beers').onSnapshot((snapshot) => {
-      const beerArray = [];
-      snapshot.forEach((doc) => {
-        beerArray.push({
-          id: doc.id,
-          ...doc.data(),
-        });
-        const ref = firestore.doc(`beers/${doc.id}`);
-        ref.update({
-          ...doc.data(),
-        });
-      });
-      setBeers(beerArray);
-    });
-    return () => unsubscribe();
-  }, []);
-
+const Beers = ({ currentUser, beers }) => {
   return (
     <div>
       <div className="beers-grid">
@@ -42,4 +22,13 @@ const Beers = ({ currentUser }) => {
   );
 };
 
-export default Beers;
+const mapStateToProps = (state) => ({
+  currentUser: selectCurrentUser(state),
+  beers: selectBeersItems(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchBeersStartAsync: () => dispatch(fetchBeersStartAsync()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Beers);

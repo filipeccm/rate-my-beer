@@ -15,8 +15,6 @@ const DisplayStars = ({ averageRating }) => {
         'width',
         `calc((1em * 4 + 0.8em) * ${avg})`
       );
-      console.log(averageRating);
-      console.log(maskRef.current.clientWidth);
     }
   }, [averageRating]);
 

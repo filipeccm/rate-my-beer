@@ -1,11 +1,14 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import './BeerPopup.css';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import './BeerPopup.css';
 
 import { firestore, toggleFavorite } from '../../firebase/firebase.utils';
 
 import DisplayStars from '../display-stars/DisplayStars';
 import Stars from '../stars/Stars';
+
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 
@@ -97,4 +100,8 @@ const BeerPopup = ({ history, match, currentUser }) => {
   );
 };
 
-export default withRouter(BeerPopup);
+const mapStateToProps = (state) => ({
+  currentUser: selectCurrentUser(state),
+});
+
+export default connect(mapStateToProps)(withRouter(BeerPopup));

@@ -1,63 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import './MyBeers.css';
 
 import OneBeer from '../beers-section/OneBeer';
 
-import { firestore } from '../../firebase/firebase.utils';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { selectFavoriteBeersItems } from '../../redux/favorite-beers/favorite-beers.selectors';
+import { selectBeersItems } from '../../redux/beers/beers.selectors';
 
-const MyBeers = ({ currentUser }) => {
-  const [favoriteBeers, setFavoriteBeers] = useState([]);
-  const [loading, setLoading] = useState(true);
+const MyBeers = ({
+  currentUser,
+
+  favoriteBeers,
+  beers,
+}) => {
+  const [favBeers, setFavBeers] = useState(null);
 
   let location = useLocation();
 
-  //get all beers
   useEffect(() => {
-    if (currentUser) {
-      //find out which beers were marked as 'favorite' by user
-      const unsubscibe = firestore
-        .collection('favorites')
-        .where(`${currentUser.id}`, '==', true)
-        .onSnapshot((snapshot) => {
-          const favoriteBeersArray = []; //array to push the favorite beers into
-          snapshot.forEach((snapshot) => {
-            firestore
-              .doc(`beers/${snapshot.id}`) //get beer data stored in another collection
-              .get()
-              .then((snap) => {
-                favoriteBeersArray.push({
-                  id: snap.id,
-                  ...snap.data(),
-                });
-                setFavoriteBeers([...favoriteBeersArray]); //update state
-                setLoading(false); //update loading state
-              })
-              .catch((error) => error.message);
-          });
-        });
-      return () => unsubscibe();
+    if (currentUser && beers && favoriteBeers) {
+      const favoriteIds = favoriteBeers.map((fav) => fav.id);
+      const favorites = beers.filter((beer) => favoriteIds.includes(beer.id));
+      setFavBeers(favorites);
     }
-  }, [currentUser]);
-
-  useEffect(() => {
-    console.log('=>', favoriteBeers);
-  }, []);
+  }, [currentUser, beers, favoriteBeers]);
 
   return (
     <div>
       <div className="my-beers-grid">
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          favoriteBeers.map((beer) => (
-            <OneBeer key={beer.id} beer={beer} currentUser={currentUser} />
-          ))
-        )}
+        {favBeers
+          ? favBeers.map((beer) => (
+              <OneBeer key={beer.id} beer={beer} currentUser={currentUser} />
+            ))
+          : null}
       </div>
     </div>
   );
 };
 
-export default MyBeers;
+const mapStateToProps = (state) => ({
+  currentUser: selectCurrentUser(state),
+  favoriteBeers: selectFavoriteBeersItems(state),
+  beers: selectBeersItems(state),
+});
+
+export default connect(mapStateToProps)(MyBeers);

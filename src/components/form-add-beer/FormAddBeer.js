@@ -22,8 +22,10 @@ const FormAddBeer = () => {
     const beersRef = firestore.collection('beers');
     try {
       setIsSubmiting(true);
+      const d = new Date();
       await beersRef.add({
         ...data,
+        createdAt: d.getTime(),
         averageRating: 0,
         numberOfRatings: 0,
         ratingTotal: 0,
@@ -83,10 +85,6 @@ const FormAddBeer = () => {
           value={data.origin}
           handleChange={handleChange}
         />
-        {/* <div className="radio-buttons">
-          <label>Rating</label>
-          <Stars handleChange={handleChange} form={true} />
-        </div> */}
         <div className="send-button-container">
           {isSubmiting ? (
             <div>Loading</div>

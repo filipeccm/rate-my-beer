@@ -72,13 +72,6 @@ p {
   width: 20px;
   height: 20px;
 }
-.beer-popup-icons .stars:not(:first-child) {
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-}
-.beer-popup-icons .stars-wrapper:hover .stars:not(:first-child) {
-  opacity: 1;
-}
 .beer-popup-info .beer-card-rating {
   width: 0px;
   transform: scale(1.1);

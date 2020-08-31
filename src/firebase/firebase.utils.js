@@ -106,19 +106,8 @@ export const rateThisBeer = async (beerId, currentUser, value) => {
   }
 };
 
-//get ratings using beer's id
-export const getAllTheRatings = async (id, currentUserId) => {
-  const ref2 = firestore
-    .collection('ratings')
-    .where('beerId', '==', id) //filter by beerId
-    // .where('userId', '==', currentUserId) //&& userId
-    .get()
-    .then((snap) => snap.forEach((data) => console.log(data.data().rating)))
-    .catch((err) => console.log(err));
-};
-
 export const toggleFavorite = async (beerId, currentUser) => {
-  if (!currentUser) return console.log('you must login to favorite');
+  if (!currentUser) return alert('you must login to favorite');
 
   const userId = currentUser.id;
 
@@ -126,7 +115,6 @@ export const toggleFavorite = async (beerId, currentUser) => {
 
   favoriteRef.get().then((doc) => {
     const obj = { ...doc.data() };
-    console.log(obj);
     if (obj.hasOwnProperty(userId) === false) {
       favoriteRef.set({
         ...obj,
@@ -136,7 +124,6 @@ export const toggleFavorite = async (beerId, currentUser) => {
       favoriteRef.update({
         [userId]: !doc.data()[userId],
       });
-      console.log(userId);
     }
   });
 };
