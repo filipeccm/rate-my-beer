@@ -1,6 +1,5 @@
-import { BeersActionTypes } from './beers.types';
-
-import { firestore } from '../../firebase/firebase.utils';
+import { fetchBeers, fetchOneBeerRating } from "../../api/api.utils";
+import { BeersActionTypes } from "./beers.types";
 
 export const addBeer = (beer) => ({
   type: BeersActionTypes.ADD_BEER,
@@ -27,24 +26,25 @@ export const fetchBeersSuccess = (beersMap) => ({
 });
 
 export const fetchBeersStartAsync = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(fetchBeersStart());
-    const unsubscribe = firestore
-      .collection('beers')
-      .orderBy('createdAt')
-      .onSnapshot({ includeMetadataChanges: true }, async (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === 'added') {
-            dispatch(addBeer({ id: change.doc.id, ...change.doc.data() }));
-          }
-          if (change.type === 'modified') {
-            dispatch(updateBeer({ id: change.doc.id, ...change.doc.data() }));
-          }
-          if (change.type === 'removed') {
-            dispatch(removeBeer(change.doc.id));
-          }
-        });
-      });
-    return () => unsubscribe();
+
+    const data = await fetchBeers();
+
+    if (data && data.results.length) {
+      const beers = await Promise.all(
+        data.results?.map(async (b) => {
+          const rating = await fetchOneBeerRating(b.id);
+          return {
+            ...b,
+            ratings: b?.ratings?.map((r) => r.rating),
+            averageRating: rating.average_rating,
+            numberOfRatings: rating.number_of_ratings,
+            totalRating: rating.total_rating,
+          };
+        })
+      );
+      dispatch(fetchBeersSuccess(beers));
+    }
   };
 };

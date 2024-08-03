@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import './FormAddBeer.css';
+import React, { useState } from "react";
+import "./FormAddBeer.css";
+import FormInput from "../form-input/FormInput";
+import { FaCheck } from "react-icons/fa";
+import { ReactComponent as BeerIcon } from "../../images/form-icon.svg";
+import { createBeer } from "../../api/api.utils";
+import { connect } from "react-redux";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 
-import FormInput from '../form-input/FormInput';
-import { FaCheck } from 'react-icons/fa';
-import { ReactComponent as BeerIcon } from '../../images/form-icon.svg';
-
-import { firestore } from '../../firebase/firebase.utils';
-
-const FormAddBeer = () => {
+const FormAddBeer = ({ currentUser }) => {
   const [data, setData] = useState({
-    name: '',
-    origin: '',
-    imageUrl: '',
+    name: "",
+    description: "",
   });
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -19,25 +18,17 @@ const FormAddBeer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const beersRef = firestore.collection('beers');
     try {
       setIsSubmiting(true);
-      const d = new Date();
-      await beersRef.add({
-        ...data,
-        createdAt: d.getTime(),
-        averageRating: 0,
-        numberOfRatings: 0,
-        ratingTotal: 0,
-      });
+      await createBeer(data, currentUser);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
       }, 2000);
-      setData({ name: '', imageUrl: '', origin: '' });
+      setData({ name: "", description: "", abv: "" });
       setIsSubmiting(false);
     } catch (error) {
-      console.log(error.message);
+      alert(error.message);
     }
   };
 
@@ -74,28 +65,34 @@ const FormAddBeer = () => {
           handleChange={handleChange}
         />
         <FormInput
+          name="description"
+          label="description"
+          value={data.description}
+          handleChange={handleChange}
+        />
+        {/* <FormInput
           name="imageUrl"
           label="Image URL"
           value={data.imageUrl}
           handleChange={handleChange}
-        />
-        <FormInput
+        /> */}
+        {/* <FormInput
           name="origin"
           label="origin"
           value={data.origin}
           handleChange={handleChange}
-        />
+        /> */}
         <div className="send-button-container">
           {isSubmiting ? (
             <div>Loading</div>
           ) : (
             <button
               className={
-                success ? 'send-button submit-successful' : 'send-button'
+                success ? "send-button submit-successful" : "send-button"
               }
               type="submit"
             >
-              {success ? <FaCheck /> : 'SUBMIT'}
+              {success ? <FaCheck /> : "SUBMIT"}
             </button>
           )}
         </div>
@@ -104,4 +101,8 @@ const FormAddBeer = () => {
   );
 };
 
-export default FormAddBeer;
+const mapStateToProps = (state) => ({
+  currentUser: selectCurrentUser(state),
+});
+
+export default connect(mapStateToProps)(FormAddBeer);

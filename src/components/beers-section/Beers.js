@@ -1,22 +1,23 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import './Beers.css';
+import React from "react";
+import { connect } from "react-redux";
+import "./Beers.css";
 
-import OneBeer from './OneBeer';
+import OneBeer from "./OneBeer";
 
-import { fetchBeersStartAsync } from '../../redux/beers/beers.actions';
-import { selectBeersItems } from '../../redux/beers/beers.selectors';
-import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { selectBeersItems } from "../../redux/beers/beers.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 
 const Beers = ({ currentUser, beers }) => {
   return (
     <div>
       <div className="beers-grid">
-        {beers
-          ? beers.map((beer) => (
-              <OneBeer key={beer.id} beer={beer} currentUser={currentUser} />
-            ))
-          : null}
+        {beers?.length && (
+          <>
+            {beers.map((beer, idx) => (
+              <OneBeer key={idx} beer={beer} currentUser={currentUser} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
@@ -27,8 +28,4 @@ const mapStateToProps = (state) => ({
   beers: selectBeersItems(state),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchBeersStartAsync: () => dispatch(fetchBeersStartAsync()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Beers);
+export default connect(mapStateToProps)(Beers);

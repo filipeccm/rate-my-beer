@@ -4,11 +4,8 @@ export const addFavoriteBeerItem = (beerItems, beerToAdd) => {
     if (!beerExists) {
       return [...beerItems, beerToAdd];
     }
-  } else {
-    const newBeers = [];
-    newBeers.push(beerToAdd);
-    return [...newBeers];
   }
+  return [beerToAdd];
 };
 
 export const updateFavoriteBeerItem = (beerItems, beerToUpdate) => {

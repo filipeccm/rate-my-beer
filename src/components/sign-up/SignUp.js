@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import './SignUp.css';
+import React, { useState } from "react";
+import "./SignUp.css";
+import FormInput from "../form-input/FormInput";
+import { ReactComponent as SignInIcon } from "../../images/sign-in-icon.svg";
+import { signup } from "../../api/api.utils";
+import { connect } from "react-redux";
+import { setCurrentUser } from "../../redux/user/user.actions";
 
-import FormInput from '../form-input/FormInput';
-import { ReactComponent as SignInIcon } from '../../images/sign-in-icon.svg';
-
-import { createUserProfileDocument, auth } from '../../firebase/firebase.utils';
-
-const FormAddBeer = () => {
+const FormAddBeer = ({ setCurrentUser }) => {
   const [newUserData, setNewUserData] = useState({
-    displayName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    createdAt: '',
+    displayName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const { displayName, email, password, confirmPassword } = newUserData;
@@ -23,21 +22,30 @@ const FormAddBeer = () => {
       alert("Passwords don't match");
       return;
     }
+
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters long");
+      return;
+    }
+
+    if (displayName.length < 2) {
+      alert("Name must be at least 2 characters long");
+      return;
+    }
     try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      await createUserProfileDocument(user, { displayName });
+      const data = await signup(displayName, email, password);
+      console.log({ data });
+
+      setCurrentUser(data);
 
       setNewUserData({
-        displayName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+        displayName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
       });
     } catch (error) {
-      console.log(error);
+      alert(error.message);
     }
   };
 
@@ -104,4 +112,8 @@ const FormAddBeer = () => {
   );
 };
 
-export default FormAddBeer;
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(null, mapDispatchToProps)(FormAddBeer);

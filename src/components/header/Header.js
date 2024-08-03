@@ -1,15 +1,15 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
-import './Header.css';
+import "./Header.css";
 
-import { FaHeart, FaUserCheck, FaUser, FaPlusCircle } from 'react-icons/fa';
-import { ReactComponent as Logo } from '../../images/rate-my-beer-logo.svg';
+import { FaHeart, FaUserCheck, FaUser, FaPlusCircle } from "react-icons/fa";
+import { ReactComponent as Logo } from "../../images/rate-my-beer-logo.svg";
 
-import { Link } from 'react-router-dom';
-import { auth } from '../../firebase/firebase.utils';
+import { Link } from "react-router-dom";
+import { setCurrentUser } from "../../redux/user/user.actions";
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, setCurrentUser }) => {
   return (
     <nav className="nav-bar">
       <Link className="nav-item" to="/">
@@ -24,7 +24,7 @@ const Header = ({ currentUser }) => {
         <span className="nav-item-desc">Add beer</span>
       </Link>
       {currentUser ? (
-        <div className="nav-item" onClick={() => auth.signOut()}>
+        <div className="nav-item" onClick={() => setCurrentUser(undefined)}>
           <FaUserCheck />
           <span className="nav-item-desc">Logout</span>
         </div>
@@ -42,4 +42,8 @@ const mapStateToProps = (state) => ({
   currentUser: state.user.currentUser,
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

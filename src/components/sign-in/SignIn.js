@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import './SignIn.css';
+import React, { useState } from "react";
+import "./SignIn.css";
+import FormInput from "../form-input/FormInput";
+import { ReactComponent as SignUpIcon } from "../../images/tap-icon.svg";
+import { signin } from "../../api/api.utils";
+import { setCurrentUser } from "../../redux/user/user.actions";
+import { connect } from "react-redux";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
 
-import { signInWithGoogle } from '../../firebase/firebase.utils';
-import { auth } from '../../firebase/firebase.utils';
-
-import FormInput from '../form-input/FormInput';
-import { ReactComponent as SignUpIcon } from '../../images/tap-icon.svg';
-
-const SignIn = () => {
+const SignIn = ({ setCurrentUser }) => {
   const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -26,8 +26,9 @@ const SignIn = () => {
     const { email, password } = loginData;
 
     try {
-      await auth.signInWithEmailAndPassword(email, password);
-      setLoginData({ email: '', password: '' });
+      const res = await signin(email, password);
+      setCurrentUser(res);
+      setLoginData({ email: "", password: "" });
     } catch (error) {
       alert(error.message);
     }
@@ -69,17 +70,18 @@ const SignIn = () => {
           <button className="send-button" type="submit">
             Login
           </button>
-          <button
-            type="button"
-            className="send-button google"
-            onClick={signInWithGoogle}
-          >
-            Login with Google
-          </button>
         </div>
       </form>
     </div>
   );
 };
 
-export default SignIn;
+const mapStateToProps = (state) => ({
+  currentUser: selectCurrentUser(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

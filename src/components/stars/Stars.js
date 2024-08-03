@@ -1,29 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import './Stars.css';
+import React, { useState } from "react";
+import "./Stars.css";
+import { connect } from "react-redux";
+import { FaStar } from "react-icons/fa";
+import FormInput from "../form-input/FormInput";
+import { fetchOneBeerRating, rateBeer } from "../../api/api.utils";
+import { updateBeer } from "../../redux/beers/beers.actions";
 
-import { FaStar } from 'react-icons/fa';
-
-import { rateThisBeer, firestore } from '../../firebase/firebase.utils';
-
-import FormInput from '../form-input/FormInput';
-
-const Stars = ({ handleChange, beerId, currentUser, form }) => {
+const Stars = ({
+  handleChange,
+  beerId,
+  currentUser,
+  form,
+  beer,
+  updateBeer,
+}) => {
   const [stars, setStars] = useState(null);
   const [hover, setHover] = useState(null);
 
-  useEffect(() => {
-    if (currentUser) {
-      const userId = currentUser.id;
-      const ratingsRef = firestore.doc(`ratings/${beerId}`);
+  const handleClick = async (i) => {
+    if (form) {
+      return setStars(i);
+    }
+    const res = await rateBeer(beerId, currentUser, i);
 
-      ratingsRef.get().then((doc) => {
-        const obj = { ...doc.data() };
-        if (obj.hasOwnProperty(userId) === true) {
-          setStars(obj[userId]);
-        }
+    if (res) {
+      const data = await fetchOneBeerRating(beerId);
+      setStars(i);
+      updateBeer({
+        ...beer,
+        numberOfRatings: data.number_of_ratings,
+        totalRating: data.total_rating,
+        averageRating: data.average_rating,
       });
     }
-  }, [beerId, currentUser]);
+  };
 
   const radios = [1, 2, 3, 4, 5];
   return (
@@ -35,14 +45,10 @@ const Stars = ({ handleChange, beerId, currentUser, form }) => {
             type="radio"
             value={i}
             handleChange={handleChange}
-            onClick={() =>
-              form
-                ? setStars(i)
-                : rateThisBeer(beerId, currentUser, i) && setStars(i)
-            }
+            onClick={async () => await handleClick(i)}
           />
           <FaStar
-            color={i <= (hover || stars) ? 'orange' : 'gray'}
+            color={i <= (hover || stars) ? "orange" : "gray"}
             onMouseEnter={() => setHover(i)}
             onMouseLeave={() => setHover(null)}
           />
@@ -52,4 +58,8 @@ const Stars = ({ handleChange, beerId, currentUser, form }) => {
   );
 };
 
-export default Stars;
+const mapDispatchToProps = (dispatch) => ({
+  updateBeer: (beer) => dispatch(updateBeer(beer)),
+});
+
+export default connect(null, mapDispatchToProps)(Stars);

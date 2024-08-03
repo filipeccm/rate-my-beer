@@ -1,26 +1,45 @@
-import { favoriteBeersActionTypes } from './favorite-beers.types';
+import {
+  favoriteBeer,
+  fetchFavoriteBeers,
+  deleteFavoriteBeer,
+} from "../../api/api.utils";
+import { favoriteBeersActionTypes } from "./favorite-beers.types";
 
-import { firestore } from '../../firebase/firebase.utils';
+export const addFavoriteBeer = (beer, currentUser) => {
+  return async (dispatch) => {
+    const res = await favoriteBeer(beer.id, currentUser);
+    if (res && res.ok) {
+      dispatch({
+        type: favoriteBeersActionTypes.ADD_FAVORITE_BEERS,
+        payload: beer,
+      });
+    }
+  };
+};
 
-export const addFavoriteBeer = (beer) => ({
-  type: favoriteBeersActionTypes.ADD_FAVORITE_BEERS,
-  payload: beer,
-});
-
-export const removeFavoriteBeer = (beerId) => ({
-  type: favoriteBeersActionTypes.REMOVE_FAVORITE_BEERS,
-  payload: beerId,
-});
+export const removeFavoriteBeer = (beerId, currentUser) => {
+  return async (dispatch) => {
+    const res = await deleteFavoriteBeer(beerId, currentUser);
+    if (res && res.ok) {
+      dispatch({
+        type: favoriteBeersActionTypes.REMOVE_FAVORITE_BEERS,
+        payload: beerId,
+      });
+    }
+  };
+};
 
 export const updateFavoriteBeer = (beer) => ({
   type: favoriteBeersActionTypes.UPDATE_FAVORITE_BEERS,
   payload: beer,
 });
 
-export const setFavoriteBeers = (beer) => ({
-  type: favoriteBeersActionTypes.SET_FAVORITE_BEERS,
-  payload: beer,
-});
+export const setFavoriteBeers = (beer) => {
+  return {
+    type: favoriteBeersActionTypes.SET_FAVORITE_BEERS,
+    payload: beer,
+  };
+};
 
 export const fetchFavoriteBeersStart = () => ({
   type: favoriteBeersActionTypes.FETCH_FAVORITE_BEERS_START,
@@ -32,24 +51,17 @@ export const fetchFavoriteBeersSuccess = (beersMap) => ({
 });
 
 export const fetchFavoriteBeersIdsStartAsync = (currentUser) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(fetchFavoriteBeersStart());
-    const unsubscribe = firestore
-      .collection('favorites')
-      .where(`${currentUser.id}`, '==', true)
-      .onSnapshot({ includeMetadataChanges: true }, async (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === 'added') {
-            dispatch(addFavoriteBeer({ id: change.doc.id }));
-          }
-          if (change.type === 'modified') {
-            dispatch(updateFavoriteBeer({ id: change.doc.id }));
-          }
-          if (change.type === 'removed') {
-            dispatch(removeFavoriteBeer(change.doc.id));
-          }
-        });
+    const data = await fetchFavoriteBeers(currentUser);
+    if (data && data?.likedBeers?.length) {
+      const beers = data.likedBeers.map((b) => {
+        return {
+          ...b.beer,
+          ratings: b?.ratings?.map((r) => r.rating),
+        };
       });
-    return () => unsubscribe();
+      dispatch(fetchFavoriteBeersSuccess(beers));
+    }
   };
 };

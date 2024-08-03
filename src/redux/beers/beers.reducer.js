@@ -1,5 +1,5 @@
-import { BeersActionTypes } from './beers.types';
-import { updateBeerItem, removeBeerItem, addBeerItem } from './beers.utils';
+import { BeersActionTypes } from "./beers.types";
+import { updateBeerItem, removeBeerItem, addBeerItem } from "./beers.utils";
 
 const INITIAL_STATE = {
   beers: null,

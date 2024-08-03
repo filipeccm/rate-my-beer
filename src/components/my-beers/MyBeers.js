@@ -1,24 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import "./MyBeers.css";
+import OneBeer from "../beers-section/OneBeer";
+import { selectCurrentUser } from "../../redux/user/user.selectors";
+import { selectFavoriteBeersItems } from "../../redux/favorite-beers/favorite-beers.selectors";
+import { selectBeersItems } from "../../redux/beers/beers.selectors";
 
-import './MyBeers.css';
-
-import OneBeer from '../beers-section/OneBeer';
-
-import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { selectFavoriteBeersItems } from '../../redux/favorite-beers/favorite-beers.selectors';
-import { selectBeersItems } from '../../redux/beers/beers.selectors';
-
-const MyBeers = ({
-  currentUser,
-
-  favoriteBeers,
-  beers,
-}) => {
+const MyBeers = ({ currentUser, favoriteBeers, beers }) => {
   const [favBeers, setFavBeers] = useState(null);
-
-  let location = useLocation();
 
   useEffect(() => {
     if (currentUser && beers && favoriteBeers) {
@@ -32,8 +21,8 @@ const MyBeers = ({
     <div>
       <div className="my-beers-grid">
         {favBeers
-          ? favBeers.map((beer) => (
-              <OneBeer key={beer.id} beer={beer} currentUser={currentUser} />
+          ? favBeers.map((beer, idx) => (
+              <OneBeer key={idx} beer={beer} currentUser={currentUser} />
             ))
           : null}
       </div>

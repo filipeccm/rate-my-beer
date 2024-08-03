@@ -1,4 +1,10 @@
 export const addBeerItem = (beerItems, beerToAdd) => {
+  if (Array.isArray(beerToAdd) && beerToAdd.length) {
+    if (beerItems) {
+      return [...beerItems, ...beerToAdd];
+    }
+    return beerToAdd;
+  }
   if (beerItems) {
     const beerExists = beerItems.find((beer) => beer.id === beerToAdd.id);
     if (!beerExists) {

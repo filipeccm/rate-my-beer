@@ -1,4 +1,6 @@
 .beer-card {
+  display: flex;
+  flex-direction: column;
   height: 225px;
   width: 225px;
   background-color: #03081d;
@@ -32,6 +34,7 @@
   opacity: 0;
 }
 .beer-card h2 {
+  font-size: 21px;
   color: white;
   text-align: left;
   margin-bottom: 0.1em;
